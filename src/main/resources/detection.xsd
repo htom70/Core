@@ -1,0 +1,155 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://fraud-detection-web-service"
+           targetNamespace="http://fraud-detection-web-service" elementFormDefault="qualified">
+
+    <xs:element name="availableEstimatorsAndWeightsRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="estimatorRequest" minOccurs="1" maxOccurs="1"/>
+                    </xs:sequence>
+                </xs:complexType>
+    </xs:element>
+
+    <xs:element name="availableEstimatorsAndWeightsResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="estimatorsAndWeights" type="tns:estimator" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="estimator">
+        <xs:sequence>
+            <xs:element name="estimatorName" type="xs:string"/>
+            <xs:element name="estimatorWeight" type="xs:int"/>
+            <xs:element name="estimatorURI" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="generateDetectionRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="detection_request" type="tns:detection_request" minOccurs="1" maxOccurs="1"/>
+                <xs:element name="status" type="xs:int" minOccurs="0" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="generateDetectionResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="detection_response" type="tns:detection_response" minOccurs="1" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="detection_request">
+        <xs:sequence>
+            <xs:element name="card_number" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="transaction_type" type="xs:int" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="timestamp" type="xs:dateTime" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="amount" type="xs:int" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="currency_name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="response_code" type="xs:int" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="country_name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="vendor_code" type="xs:string" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="detection_response">
+        <xs:sequence>
+            <xs:element name="prediction" type="xs:int"/>
+            <xs:element name="negative_probability" type="xs:double"/>
+            <xs:element name="positive_probability" type="xs:double"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="saveObservedValueRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="request" type="tns:observed_fraud_request" minOccurs="1" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="saveObservedValueResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="response" type="tns:observed_fraud_response" minOccurs="1" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="observed_fraud_request">
+        <xs:sequence>
+            <xs:element name="id" type="xs:string"/>
+            <xs:element name="value" type="xs:int"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="observed_fraud_response">
+        <xs:sequence>
+            <xs:element name="result" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="generateQualifiersRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="interval" type="tns:specify_qualifiers_date_interval"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="generateQualifiersResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="response" type="tns:qualifiers" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="qualifiers">
+        <xs:sequence>
+            <xs:element name="truePositive" type="xs:int"/>
+            <xs:element name="falsePositive" type="xs:int"/>
+            <xs:element name="falseNegative" type="xs:int"/>
+            <xs:element name="trueNegative" type="xs:int"/>
+            <xs:element name="precision" type="xs:double"/>
+            <xs:element name="recall" type="xs:double"/>
+            <xs:element name="specifity" type="xs:double"/>
+            <xs:element name="accuracy" type="xs:double"/>
+            <xs:element name="f1score" type="xs:double"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="specify_qualifiers_date_interval">
+        <xs:sequence>
+            <xs:element name="begin_date" type="xs:date"/>
+            <xs:element name="end_date" type="xs:date"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="configureEstimatorWeightsRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="estimatorWeights" type="tns:estimatorWeights" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="configureEstimatorWeightsResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="estimatorsAndWeights" type="tns:estimator" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="estimatorWeights">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="weight" type="xs:int"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>
